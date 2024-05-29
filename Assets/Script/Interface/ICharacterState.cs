@@ -6,7 +6,7 @@ namespace Game.Interface
     {
         void Enter(Character character);
         void Exit(Character character);
-        void Update(Character character);
+        void Update(Character character,object value);
     }
 }
 

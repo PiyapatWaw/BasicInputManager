@@ -6,29 +6,26 @@ using UnityEngine;
 
 namespace Game
 {
-    public class WalkingState : ICharacterState ,IMove
+    public class WalkingState : ICharacterState
     {
-        private Character character;
-        
         public void Enter(Character character)
         {
-            this.character = character;
-            InputManager.Singleton.MoveInput += Move;
             character.SetAnimatorBool("Walk", true);
         }
 
         public void Exit(Character character)
         {
-            InputManager.Singleton.MoveInput -= Move;
             character.SetAnimatorBool("Walk", false);
         }
 
-        public void Update(Character character)
+        public void Update(Character character, object value)
         {
-            
+            if (value is Vector2 direction)
+                Move(character,direction);
         }
+        
 
-        public void Move(Vector2 direction)
+        private void Move(Character character,Vector2 direction)
         {
             if (direction == Vector2.zero)
             {

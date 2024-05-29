@@ -15,7 +15,7 @@ namespace Game
             
         }
 
-        public void Update(Character character)
+        public void Update(Character character, object value = null)
         {
             
         }

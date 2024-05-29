@@ -8,35 +8,46 @@ namespace Game.Controller
         private readonly KeyCode[] skillKeys = { KeyCode.Keypad1, KeyCode.Keypad2, KeyCode.Keypad3, KeyCode.Keypad4 };
         
         public static InputManager Singleton;
-        public event Action<Vector2> MoveInput;
-        public event Action<int> SkillInput;
 
         private void Awake()
         {
             Singleton = this;
         }
 
-        private void Update()
+        public InputValue ReadInput()
         {
-            Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            ReadMove(input);
+            var vector = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if (vector != Vector2.zero)
+                return new InputValue(EInputType.Move,vector);
             
             for (int i = 0; i < skillKeys.Length; i++)
             {
                 if (Input.GetKeyDown(skillKeys[i]))
                 {
-                    ReadSkill(i);
+                    return new InputValue(EInputType.Skill,i);
                 }
             }
+            
+            return new InputValue(EInputType.None,null);
         }
-        
-        public void ReadMove(Vector2 direction)
+    }
+
+    public enum EInputType
+    {
+        None,
+        Move,
+        Skill,
+    }
+    
+    public struct InputValue
+    {
+        public EInputType Type;
+        public object  Value;
+
+        public InputValue(EInputType type, object  value)
         {
-            MoveInput?.Invoke(direction);
-        }
-        public void ReadSkill(int index) // can call by ui button follow index
-        {
-            SkillInput?.Invoke(index);
+            Type = type;
+            Value = value;
         }
     }
 }

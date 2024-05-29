@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Game.Controller;
 using Game.Interface;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game
@@ -20,9 +21,9 @@ namespace Game
             character.ChangeState(new IdleState());
         }
 
-        public void Update(Character character)
+        public void Update(Character character, object value)
         {
-            
+            throw new System.NotImplementedException();
         }
 
         public void Enter(Character character)

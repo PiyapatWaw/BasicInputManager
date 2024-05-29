@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Controller
 {
-    public class Character : MonoBehaviour , IDisposable
+    public class Character : MonoBehaviour
     {
         [SerializeField] private float speed = 3;
         [SerializeField] private CharacterController _controller;
@@ -25,27 +25,27 @@ namespace Game.Controller
         private IEnumerator Start()
         {
             yield return new WaitUntil(() => InputManager.Singleton != null);
-            InputManager.Singleton.MoveInput += ReadVectorInput;
-            InputManager.Singleton.SkillInput += ActiveSkill;
         }
 
         private void Update()
         {
-            currentState?.Update(this);
-        }
-        
-        public void ReadVectorInput(Vector2 direction)
-        {
-            if (direction != Vector2.zero && currentState is not WalkingState)
+            var Input = InputManager.Singleton.ReadInput();
+
+            if (Input.Type == EInputType.None)
+            {
+                ChangeState(new IdleState());
+            }
+            else if (Input.Type == EInputType.Move && currentState is not WalkingState)
             {
                 ChangeState(new WalkingState());
             }
-        }
-
-        public void Dispose()
-        {
-            InputManager.Singleton.MoveInput -= ReadVectorInput;
-            InputManager.Singleton.SkillInput -= ActiveSkill;
+            else if (Input.Type == EInputType.Skill)
+            {
+                int skillindex = (int)Input.Value;
+                ActiveSkill(skillindex);
+            }
+            
+            currentState?.Update(this,Input.Value);
         }
 
         private void ActiveSkill(int index)
