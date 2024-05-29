@@ -14,13 +14,13 @@ namespace Game
         {
             this.character = character;
             InputManager.Singleton.MoveInput += Move;
-            character.Animator.SetBool("Walk", true);
+            character.SetAnimatorBool("Walk", true);
         }
 
         public void Exit(Character character)
         {
             InputManager.Singleton.MoveInput -= Move;
-            character.Animator.SetBool("Walk", false);
+            character.SetAnimatorBool("Walk", false);
         }
 
         public void Update(Character character)

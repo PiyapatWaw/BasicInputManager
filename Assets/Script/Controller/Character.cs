@@ -15,7 +15,6 @@ namespace Game.Controller
         private ICharacterState currentState;
 
         public CharacterController Controller => _controller;
-        public Animator Animator => _animator;
         public float Speed => speed;
 
         public void Initialize(List<ISkill> skills) // call from somewhere that have character data
@@ -26,7 +25,7 @@ namespace Game.Controller
         private IEnumerator Start()
         {
             yield return new WaitUntil(() => InputManager.Singleton != null);
-            InputManager.Singleton.MoveInput += Move;
+            InputManager.Singleton.MoveInput += ReadVectorInput;
             InputManager.Singleton.SkillInput += ActiveSkill;
         }
 
@@ -35,7 +34,7 @@ namespace Game.Controller
             currentState?.Update(this);
         }
         
-        public void Move(Vector2 direction)
+        public void ReadVectorInput(Vector2 direction)
         {
             if (direction != Vector2.zero && currentState is not WalkingState)
             {
@@ -45,7 +44,7 @@ namespace Game.Controller
 
         public void Dispose()
         {
-            InputManager.Singleton.MoveInput -= Move;
+            InputManager.Singleton.MoveInput -= ReadVectorInput;
             InputManager.Singleton.SkillInput -= ActiveSkill;
         }
 
@@ -62,6 +61,11 @@ namespace Game.Controller
             currentState?.Exit(this);
             currentState = newState;
             currentState.Enter(this);
+        }
+
+        public void SetAnimatorBool(string key, bool value)
+        {
+            _animator.SetBool(key,value);
         }
     }
 }
