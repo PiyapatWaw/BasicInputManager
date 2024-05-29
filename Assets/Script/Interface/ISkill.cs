@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Game.Controller;
 using UnityEngine;
 
 namespace Game.Interface
@@ -7,7 +8,7 @@ namespace Game.Interface
     public interface ISkill
     {
         public Sprite Icon { get; set; }
-        public void ActiveSkill();
+        public void Active(Character user);
     }
 }
 
